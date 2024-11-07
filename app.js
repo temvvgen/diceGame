@@ -45,17 +45,8 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
     roundScore = 0;
     document.getElementById("current-" + activePlayer).textContent = 0;
 
-    // 1буусан бол тоглогчийн ээлжийг солих
     // идэвхтэй тоглогчийг солих
-    if (activePlayer === 1) {
-      activePlayer = 2;
-    } else {
-      activePlayer = 1;
-    }
-
-    // улаан цэгийг шилжүүлэх
-    document.querySelector(".player-1-panel").classList.toggle("active");
-    document.querySelector(".player-2-panel").classList.toggle("active");
+    switchToNextPlayer();
 
     //шоог түр алга болгоно.
     if (diceNumber === 1) {
@@ -65,3 +56,50 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
     }
   }
 });
+
+// hold товчны eventlistener
+document.querySelector(".btn-hold").addEventListener("click", function () {
+  // тоглогчийн ээлжиндээ цуглуулсан оноог нэмж хадгалах.
+  if (activePlayer === 1) {
+    scores[0] = scores[0] + roundScore;
+  } else {
+    scores[1] = scores[1] + roundScore;
+  }
+  document.getElementById("score-1").textContent = scores[0];
+  document.getElementById("score-2").textContent = scores[1];
+
+  diceDom.style.display = "none";
+
+  // yalagchiig todruulah
+  if (scores[0] >= 20) {
+    document.getElementById("name-1").textContent = "WINNER!";
+    document.querySelector(".player-1-panel").classList.add("winner");
+    document.querySelector(".player-1-panel").classList.remove("active");
+    document.querySelector(".btn-hold").style.display = "none";
+    document.querySelector(".btn-roll").style.display = "none";
+  } else if (scores[1] >= 20) {
+    document.getElementById("name-2").textContent = "WINNER";
+    document.querySelector(".player-2-panel").classList.add("winner");
+    ocument.querySelector(".player-1-panel").classList.remove("active");
+  } else {
+    switchToNextPlayer();
+  }
+});
+
+// toglogchiig solih function
+function switchToNextPlayer() {
+  // оноо хадгалсаны дараа ээлжийн оноог 0 болгоно
+  document.getElementById("current-1").textContent = "0";
+  document.getElementById("current-2").textContent = "0";
+  roundScore = 0;
+
+  // ээлж солино.
+  if (activePlayer === 1) {
+    activePlayer = 2;
+  } else {
+    activePlayer = 1;
+  }
+
+  document.querySelector(".player-1-panel").classList.toggle("active");
+  document.querySelector(".player-2-panel").classList.toggle("active");
+}
